@@ -53,12 +53,31 @@ fn main() {
         .file(src_codec_video_dir.join("scaler.c"))
         .compile("ffwrapper");
 
+    // build.include(Path::new("/opt/homebrew/opt/zlib/include"));
+
     for dir in ac_ffmpeg_build::ffmpeg_lib_dirs(true) {
         println!("cargo:rustc-link-search=native={}", dir.display());
     }
 
     let ffmpeg_link_mode = link_mode();
 
+    println!("cargo:rustc-link-search=native=/opt/homebrew/opt/zlib/lib/");
+    println!("cargo:rustc-link-search=native=/opt/homebrew/opt/x264/lib/");
+    println!("cargo:rustc-link-search=native=/opt/homebrew/opt/bzip2/lib/");
+
+    println!("cargo:rustc-link-lib=framework=CoreServices");
+    println!("cargo:rustc-link-lib=framework=CoreGraphics");
+    println!("cargo:rustc-link-lib=framework=CoreText");
+    println!("cargo:rustc-link-lib=framework=CoreFoundation");
+    println!("cargo:rustc-link-lib=framework=AudioUnit");
+    println!("cargo:rustc-link-lib=framework=AudioToolbox");
+    println!("cargo:rustc-link-lib=framework=CoreAudio");
+    println!("cargo:rustc-link-lib=framework=Security");
+    println!("cargo:rustc-link-lib=framework=VideoToolbox");
+
+    link("z", ffmpeg_link_mode);
+    link("x264", ffmpeg_link_mode);
+    link("bz2", ffmpeg_link_mode);
     link("avcodec", ffmpeg_link_mode);
     link("avformat", ffmpeg_link_mode);
     link("avutil", ffmpeg_link_mode);
