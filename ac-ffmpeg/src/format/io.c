@@ -2,7 +2,11 @@
 #include <libavutil/mem.h>
 
 typedef int read_packet_t(void*, uint8_t*, int);
+#if LIBAVUTIL_VERSION_MAJOR >= 59
+typedef int write_packet_t(void*, const uint8_t*, int);
+#else
 typedef int write_packet_t(void*, uint8_t*, int);
+#endif
 typedef int64_t seek_t(void*, int64_t, int);
 
 int ffw_io_is_avseek_size(int whence) {
