@@ -65,15 +65,18 @@ fn main() {
     println!("cargo:rustc-link-search=native=/opt/homebrew/opt/x264/lib/");
     println!("cargo:rustc-link-search=native=/opt/homebrew/opt/bzip2/lib/");
 
-    println!("cargo:rustc-link-lib=framework=CoreServices");
-    println!("cargo:rustc-link-lib=framework=CoreGraphics");
-    println!("cargo:rustc-link-lib=framework=CoreText");
-    println!("cargo:rustc-link-lib=framework=CoreFoundation");
-    println!("cargo:rustc-link-lib=framework=AudioUnit");
-    println!("cargo:rustc-link-lib=framework=AudioToolbox");
-    println!("cargo:rustc-link-lib=framework=CoreAudio");
-    println!("cargo:rustc-link-lib=framework=Security");
-    println!("cargo:rustc-link-lib=framework=VideoToolbox");
+    #[cfg(target_os = "macos")]
+    {
+        println!("cargo:rustc-link-lib=framework=CoreServices");
+        println!("cargo:rustc-link-lib=framework=CoreGraphics");
+        println!("cargo:rustc-link-lib=framework=CoreText");
+        println!("cargo:rustc-link-lib=framework=CoreFoundation");
+        println!("cargo:rustc-link-lib=framework=AudioUnit");
+        println!("cargo:rustc-link-lib=framework=AudioToolbox");
+        println!("cargo:rustc-link-lib=framework=CoreAudio");
+        println!("cargo:rustc-link-lib=framework=Security");
+        println!("cargo:rustc-link-lib=framework=VideoToolbox");
+    }
 
     link("z", ffmpeg_link_mode);
     link("x264", ffmpeg_link_mode);
