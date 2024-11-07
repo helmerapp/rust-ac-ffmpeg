@@ -61,12 +61,13 @@ fn main() {
 
     let ffmpeg_link_mode = link_mode();
 
-    println!("cargo:rustc-link-search=native=/opt/homebrew/opt/zlib/lib/");
-    println!("cargo:rustc-link-search=native=/opt/homebrew/opt/x264/lib/");
-    println!("cargo:rustc-link-search=native=/opt/homebrew/opt/bzip2/lib/");
-
+    // Added this to fix linking errors on Windows
     #[cfg(target_os = "macos")]
     {
+        println!("cargo:rustc-link-search=native=/opt/homebrew/opt/zlib/lib/");
+        println!("cargo:rustc-link-search=native=/opt/homebrew/opt/x264/lib/");
+        println!("cargo:rustc-link-search=native=/opt/homebrew/opt/bzip2/lib/");
+
         println!("cargo:rustc-link-lib=framework=CoreServices");
         println!("cargo:rustc-link-lib=framework=CoreGraphics");
         println!("cargo:rustc-link-lib=framework=CoreText");
@@ -76,11 +77,12 @@ fn main() {
         println!("cargo:rustc-link-lib=framework=CoreAudio");
         println!("cargo:rustc-link-lib=framework=Security");
         println!("cargo:rustc-link-lib=framework=VideoToolbox");
+
+        link("z", ffmpeg_link_mode);
+        link("x264", ffmpeg_link_mode);
+        link("bz2", ffmpeg_link_mode);
     }
 
-    link("z", ffmpeg_link_mode);
-    link("x264", ffmpeg_link_mode);
-    link("bz2", ffmpeg_link_mode);
     link("avcodec", ffmpeg_link_mode);
     link("avformat", ffmpeg_link_mode);
     link("avutil", ffmpeg_link_mode);
